@@ -10,7 +10,7 @@ const JoinRoom = () => {
   const joinRoom = () => {
     if (roomCode && playerName) {
       // Використовуємо WebSocket для підключення до серверу
-      const ws = new WebSocket('ws://localhost:5000');
+      const ws = new WebSocket('ws://spy-server.onrender.com');
 
       ws.onopen = () => {
 
