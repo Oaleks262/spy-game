@@ -26,7 +26,7 @@ const Game = () => {
   const playerName = location.state?.playerName || 'Без імені';
 
   useEffect(() => {
-    ws.current = new WebSocket('ws://localhost:5000');
+    ws.current = new WebSocket('ws://spy-server.onrender.com');
 
     ws.current.onopen = () => {
       console.log('Connected to WebSocket');
