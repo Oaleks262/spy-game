@@ -1,0 +1,103 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #121212; // Чорний фон
+    color: #ffffff; // Білий текст
+    font-family: 'Arial', sans-serif;
+  }
+  
+  h1, h2, h3 {
+    color: #f44336; // Червоний для заголовків
+  }
+  
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* Ширина для всієї секції з кнопками */
+  }
+  
+ 
+  
+  
+  .main-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  
+    .logo {
+      margin-bottom: 40px;
+  
+      h1 {
+        font-size: 3rem;
+      }
+    }
+  
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+  
+  a {
+    text-decoration: none;
+  }
+  .page {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.5s forwards;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  /* Для мобільних пристроїв */
+@media (max-width: 600px) {
+    .main-screen h1 {
+      font-size: 2rem; // Менший розмір шрифту на мобільних
+    }
+  
+    .buttons {
+      flex-direction: column;
+    }
+  
+    button {
+      font-size: 1rem; // Зменшені кнопки
+      padding: 10px 20px;
+    }
+  }
+  
+  /* Для планшетів */
+  @media (min-width: 601px) and (max-width: 1024px) {
+    .main-screen h1 {
+      font-size: 2.5rem; // Трохи більший текст на планшетах
+    }
+  
+    button {
+      font-size: 1.1rem;
+      padding: 12px 25px;
+    }
+  }
+  
+  /* Для комп'ютерів */
+  @media (min-width: 1025px) {
+    .main-screen h1 {
+      font-size: 3rem; // Стандартний розмір для комп'ютерів
+    }
+  
+    button {
+      font-size: 1.2rem;
+      padding: 15px 30px;
+    }
+  }
+  

@@ -1,0 +1,46 @@
+.join-room {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: #ffffff;
+  
+    h1 {
+      color: #f44336;
+      margin-bottom: 20px;
+    }
+  
+    input {
+      background-color: #d8dadd;
+      border: none;
+      color: rgb(76, 73, 73);
+      padding: 10px;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      width: 300px;
+      border-radius: 5px;
+      outline: none;
+  
+      &::placeholder {
+        color: #95a5a6;
+      }
+    }
+  
+    button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #f44336;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+  
+        &:hover {
+          background-color: #d32f2f;
+        }
+      }
+  }
+  
