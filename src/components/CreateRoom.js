@@ -11,7 +11,7 @@ const CreateRoom = () => {
   const navigate = useNavigate();
 
   const createWebSocketConnection = () => {
-    const socket = new WebSocket('ws://spy-server.onrender.com');
+    const socket = new WebSocket('wss://spy-server.onrender.com');
 
     socket.onopen = () => {
       console.log('Підключено до сервера WebSocket');
