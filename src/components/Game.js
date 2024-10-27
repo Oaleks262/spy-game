@@ -6,6 +6,7 @@ const Game = () => {
   const { roomCode } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const [isStartButtonVisible, setIsStartButtonVisible] = useState(false);
   const [gameState, setGameState] = useState('Очікуємо гравців...');
   const [role, setRole] = useState('');
   const [locationState, setLocationState] = useState('');
@@ -17,8 +18,8 @@ const Game = () => {
   const [currentPlayer, setCurrentPlayer] = useState('');
   const [nextPlayer, setNextPlayer] = useState('');
   const [microphoneActive, setMicrophoneActive] = useState(false);
-  const [timer, setTimer] = useState(120); // Таймер на 2 хвилини
-  const [intervalId, setIntervalId] = useState(null); // Додаємо для зберігання інтервалу
+  const [timer, setTimer] = useState(120);
+  const [intervalId, setIntervalId] = useState(null);
   const ws = useRef(null);
   const peerConnections = useRef({});
   const localStream = useRef(null);
@@ -26,8 +27,7 @@ const Game = () => {
   const playerName = location.state?.playerName || 'Без імені';
 
   useEffect(() => {
-    ws.current = new WebSocket('wss://spy-server.onrender.com');
-
+    ws.current = new WebSocket('ws://localhost:5000');
     ws.current.onopen = () => {
       console.log('Connected to WebSocket');
       ws.current.send(
@@ -41,7 +41,7 @@ const Game = () => {
 
     ws.current.onmessage = (message) => {
       const data = JSON.parse(message.data);
-      console.log('Отримано повідомлення:', data);  // Лог для перевірки отриманих даних
+      console.log('Отримано повідомлення:', data);
       switch (data.type) {
         case 'role':
           setRole(data.role);
@@ -50,12 +50,12 @@ const Game = () => {
             setLocationState(data.location);
           }
           break;
+        case 'show-start-button':
+          setIsStartButtonVisible(true); // Відображаємо кнопку
+          break;
         case 'game-started':
           setGameState('Гра розпочалась!');
           setGameStarted(true);
-          break;
-        case 'next-round':
-          setGameState(`Раунд ${data.round}`);
           break;
         case 'start-introduction':
           setGameState('Раунд 1: Знайомство');
@@ -63,19 +63,19 @@ const Game = () => {
           setCurrentPlayer(data.players[0]);
           setNextPlayer(data.players[1]);
           setMicrophoneActive(true);
-          startTimer(); // Запуск таймера при початку знайомства
+          startTimer();
           break;
         case 'next-introducer':
           setCurrentPlayer(data.currentPlayer);
           setNextPlayer(data.nextPlayer);
-          setMicrophoneActive(true);
-          resetTimer(); // Скинути таймер при переході до наступного гравця
+          setMicrophoneActive(data.currentPlayer === playerName);
+          resetTimer();
           break;
         case 'introduction-ended':
           setGameState('Знайомство завершене');
           setIntroducing(false);
           setMicrophoneActive(false);
-          clearTimer(); // Очистити таймер після закінчення знайомства
+          clearTimer();
           break;
         case 'vote-result':
           setGameState(`Гравець ${data.suspect} отримав найбільше голосів`);
@@ -98,12 +98,11 @@ const Game = () => {
           setPlayerCount(data.players.length);
           break;
 
-        // Додано обробку для WebRTC
         case 'offer':
-          handleOffer(data);  // Викликаємо функцію обробки пропозиції
+          handleOffer(data);
           break;
         case 'answer':
-          handleAnswer(data);  // Викликаємо функцію обробки відповіді
+          handleAnswer(data);
           break;
         case 'ice-candidate':
           const peerConnection = peerConnections.current[data.playerId];
@@ -129,7 +128,7 @@ const Game = () => {
   }, [roomCode, playerName, navigate]);
 
   const startTimer = () => {
-    setTimer(120); // Скидання таймера на 2 хвилини
+    setTimer(120);
     const newIntervalId = setInterval(() => {
       setTimer((prev) => {
         if (prev <= 1) {
@@ -139,8 +138,8 @@ const Game = () => {
         }
         return prev - 1;
       });
-    }, 1000); // Зменшення на 1 сек за 1000 мс
-    setIntervalId(newIntervalId); // Зберігаємо інтервал
+    }, 1000);
+    setIntervalId(newIntervalId);
   };
 
   const resetTimer = () => {
@@ -150,28 +149,35 @@ const Game = () => {
   const clearTimer = () => {
     setTimer(0);
     if (intervalId) {
-      clearInterval(intervalId); // Зупиняємо інтервал, якщо він існує
-      setIntervalId(null); // Очищаємо значення
+      clearInterval(intervalId);
+      setIntervalId(null);
     }
   };
 
   const createPeerConnection = (playerId) => {
+    console.log(`Створюємо PeerConnection для гравця з id: ${playerId}`);  // Додаємо логування
+  
     const peerConnection = new RTCPeerConnection({
       iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
     });
-
+  
     peerConnections.current[playerId] = peerConnection;
-
-    localStream.current.getTracks().forEach((track) => {
-      peerConnection.addTrack(track, localStream.current);
-    });
-
+  
+    if (peerConnection.getSenders().length === 0) {
+      localStream.current.getTracks().forEach((track) => {
+        console.log(`Додаємо трек ${track.kind} до WebRTC для гравця ${playerId}`);
+        peerConnection.addTrack(track, localStream.current);
+      });
+    }
+  
     peerConnection.ontrack = (event) => {
+      console.log("Новий віддалений трек отримано:", event.streams[0]);
       remoteAudio.current.srcObject = event.streams[0];
-      remoteAudio.current.autoplay = true;
-      remoteAudio.current.play();
+      remoteAudio.current.play().catch((error) => {
+        console.log('Помилка з відтворенням віддаленого звуку:', error);
+      });
     };
-
+  
     peerConnection.onicecandidate = (event) => {
       if (event.candidate) {
         ws.current.send(JSON.stringify({
@@ -182,25 +188,41 @@ const Game = () => {
         }));
       }
     };
-
+  
     return peerConnection;
   };
+  
+  
 
   const startLocalStream = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      console.log("Мікрофон успішно підключено:", stream);
       localStream.current = stream;
-
+  
+      // Перевіряємо, чи гравець має id перед створенням з'єднання
       players.forEach((player) => {
-        createPeerConnection(player.id);
+        if (player.id) {  // Додаємо перевірку на наявність player.id
+          const peerConnection = createPeerConnection(player.id);
+          if (peerConnection.getSenders().length === 0) {
+            stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
+          }
+        } else {
+          console.warn("player.id is undefined for a player:", player);
+        }
       });
+  
+      remoteAudio.current.srcObject = stream;
+      remoteAudio.current.autoplay = true;
+      remoteAudio.current.play();
     } catch (error) {
       console.error('Помилка доступу до мікрофону:', error);
     }
   };
+  
+  
 
   const handleOffer = (data) => {
-    console.log('Обробляємо пропозицію:', data);  // Лог для перевірки
     const offerPeerConnection = createPeerConnection(data.playerId);
     offerPeerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
     offerPeerConnection.createAnswer().then((answer) => {
@@ -210,13 +232,13 @@ const Game = () => {
   };
 
   const handleAnswer = (data) => {
-    console.log('Обробляємо відповідь:', data);  // Лог для перевірки
     const answerPeerConnection = peerConnections.current[data.playerId];
     answerPeerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
   };
 
   const finishIntroduction = () => {
-    ws.current.send(JSON.stringify({ type: 'finish-introduction', roomCode }));
+    ws.current.send(JSON.stringify({ type: 'finish-introduction', roomCode,
+      playerName,  }));
     setMicrophoneActive(false);
     clearTimer();
   };
@@ -244,27 +266,30 @@ const Game = () => {
         {players.map((player, index) => (
           <li 
             key={index} 
-            style={{ color: currentPlayer === player ? 'red' : 'black' }}
-          >
-            {player}
-            {currentPlayer === player && <span>🔊</span>} {/* Динамік */}
+            style={{ color: currentPlayer === player ? 'red' : 'white' }}>
+            {player} {currentPlayer === player && microphoneActive && <span>🎤</span>}
           </li>
         ))}
       </ul>
 
-      {playerCount >= 3 && !gameStarted && (
+      {/* {playerCount >= 3 && !gameStarted && (
         <button onClick={handleStartGame}>Почати гру</button>
-      )}
+      )} */}
 
-      {introducing && (
+      {gameStarted ? (
         <div>
           <p>Гравець {currentPlayer} представляється.</p>
-          <p>Залишилось часу: {timer} секунд</p>
-          {/* Додаємо перевірку на те, чи є ви поточним гравцем */}
-          {microphoneActive && currentPlayer === playerName && ( // Кнопка для завершення виступу
+          <p>До кінця виступу: {timer} секунд</p>
+          {introducing && microphoneActive && (
             <button onClick={finishIntroduction}>Завершити виступ</button>
           )}
         </div>
+      ) : (
+        <div>
+       {playerCount >= 3 && !gameStarted && (
+        <button onClick={handleStartGame}>Почати гру</button>
+      )}
+      </div>
       )}
     </div>
   );
