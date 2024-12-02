@@ -6,13 +6,15 @@ import JoinRoom from './components/JoinRoom';
 import Developers from './components/Developers';
 import Support from './components/Support';
 import Game from './components/Game';
+import Homepage from './components/store/HomePage';
 import './styles/main.scss';
 
 const App = () => {
   return (
  <Router>
       <Routes>
-        <Route path="/" element={<MainScreen />} />
+        <Route path="/" element={<Homepage />} />
+        <Route path="/game" element={<MainScreen />} />
         <Route path="/create-room" element={<CreateRoom />} />
         <Route path="/join-room" element={<JoinRoom />} />
         <Route path="/developers" element={<Developers />} />

@@ -20,6 +20,9 @@ const Game = () => {
   const [microphoneActive, setMicrophoneActive] = useState(false);
   const [timer, setTimer] = useState(120);
   const [intervalId, setIntervalId] = useState(null);
+  const [isDiscussion, setIsDiscussion] = useState(false);
+  const [isVoting, setIsVoting] = useState(false);
+  const [discussionTimer, setDiscussionTimer] = useState(120);
   const ws = useRef(null);
   const peerConnections = useRef({});
   const localStream = useRef(null);
@@ -27,7 +30,7 @@ const Game = () => {
   const playerName = location.state?.playerName || 'Без імені';
 
   useEffect(() => {
-    ws.current = new WebSocket('wss://spy-server.onrender.com');
+    ws.current = new WebSocket('ws://localhost:5000');
     ws.current.onopen = () => {
       console.log('Connected to WebSocket');
       ws.current.send(
@@ -97,7 +100,18 @@ const Game = () => {
           setPlayers(data.players);
           setPlayerCount(data.players.length);
           break;
-
+        // Розпочинається етап обговорення
+        case 'start-discussion':
+          setGameState('Етап обговорення');
+          setIsDiscussion(true);
+          startDiscussionTimer();
+          break;
+  
+        // Завершення голосування
+        case 'voting-ended':
+          setGameState(`Голосування завершене! Гравець ${data.suspect} отримав найбільше голосів`);
+          setIsVoting(false);
+          break;
         case 'offer':
           handleOffer(data);
           break;
@@ -126,6 +140,29 @@ const Game = () => {
       }
     };
   }, [roomCode, playerName, navigate]);
+
+// Запуск таймера обговорення
+const startDiscussionTimer = () => {
+  setDiscussionTimer(120);
+  const discussionIntervalId = setInterval(() => {
+    setDiscussionTimer((prev) => {
+      if (prev <= 1) {
+        clearInterval(discussionIntervalId);
+        endDiscussion();
+        return 0;
+      }
+      return prev - 1;
+    });
+  }, 1000);
+};
+
+// Завершення обговорення і запуск голосування
+const endDiscussion = () => {
+  setIsDiscussion(false);
+  setIsVoting(true);
+  setGameState("Голосування почалося!");
+  ws.current.send(JSON.stringify({ type: 'start-voting', roomCode }));
+};
 
   const startTimer = () => {
     setTimer(120);
@@ -271,7 +308,21 @@ const Game = () => {
           </li>
         ))}
       </ul>
+      {isDiscussion && (
+      <div>
+        <p>Етап обговорення триває</p>
+        <p>До кінця обговорення: {discussionTimer} секунд</p>
+      </div>
+    )}
 
+    {isVoting && (
+      <div>
+        <p>Голосування триває...</p>
+        <button onClick={() => ws.current.send(JSON.stringify({ type: 'vote', roomCode, playerName, suspect: "обраний_підозрюваний" }))}>
+          Проголосувати
+        </button>
+      </div>
+    )}
       {/* {playerCount >= 3 && !gameStarted && (
         <button onClick={handleStartGame}>Почати гру</button>
       )} */}

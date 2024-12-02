@@ -1,13 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Keania+One&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 body {
+    width: 100%;
+    height: 100%;
     margin: 0;
     padding: 0;
-    background-color: #121212; // Чорний фон
+    background-color: #000000; // Чорний фон
     color: #ffffff; // Білий текст
     font-family: 'Arial', sans-serif;
   }
   
   h1, h2, h3 {
-    color: #f44336; // Червоний для заголовків
+    color: #f44336; 
+
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    unicode-bidi: isolate;
   }
   
   .buttons {

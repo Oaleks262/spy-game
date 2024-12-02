@@ -1,0 +1,315 @@
+
+.border{
+    display: flex;
+    justify-content: center;
+    max-width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.984) url(../components/assets/img/bg.png);
+    background-position: right;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.bashbord{
+    padding: 40px;
+    display: flex; 
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%; 
+}
+.pages{
+  display: flex;
+  margin: 45px 0;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: flex-start;
+}
+.first-page{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    gap: 65px;
+    align-items: start;
+    flex-direction: column;
+}
+.hero-1{
+    display: flex;
+    width: 100%;
+        h1{
+            color: rgb(255, 255, 255);
+            font-family: Raleway;
+            font-size: 60px;
+            font-weight: 100;
+            letter-spacing: 0%;
+            text-align: start;
+            .spy-text{
+                font-weight: 400;
+                font-size: 80px;
+
+                cursor: pointer;
+                .spy-leter{
+                    color: red;
+                    text-decoration:underline red;
+                    transition: font-size 1s ease-in,
+                                color 500ms ease-in;
+                }
+                .spy-leter:hover{
+                    color:rgba(255, 253, 253, 0.793);
+                    text-shadow: red 1px 0 10px;
+                    
+                    
+                }
+            }
+
+        }
+}
+.hero-2{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 200px;
+}
+.hero-2-text{
+    display: flex;
+    flex-direction: column;
+    p{
+        color: rgb(255, 255, 255);
+        font-family: Raleway;
+        font-size: 20px;
+        font-weight: 300;
+        letter-spacing: 0%;
+        text-align: left;
+    }
+}
+.hero-2-buttom{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+
+   .hero-2-buttom-red{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    background: red;
+    box-shadow: 2px 2px 2px white;
+    transition: background 1s, box-shadow 1s ;
+     p{
+        margin: 10px 27px;
+        color: white;
+        transition: color 1s;
+     }
+    }
+    .hero-2-buttom-red:hover{
+        background: none;
+        border: 1px solid red;
+        box-shadow: 2px 3px 3px red;
+        p{
+            color: red;
+        }
+    }
+    .hero-2-buttom-black{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 15px;
+        background: none;
+        border: 1px solid red;
+        box-shadow: 2px 2px 2px red;
+        transition: background 1s, box-shadow 1s ;
+        p{
+            margin: 10px 27px;
+            color: red;
+            transition: color 1s;
+         }
+    }
+    .hero-2-buttom-black:hover{
+        background: red;
+        border: 1px solid red;
+        box-shadow: 2px 3px 3px white;
+        p{
+            color: white;
+        }
+    }
+}
+.hero-2-list{
+    display: flex;
+
+
+ul.animated-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    list-style-type: circle;
+    padding: 0;
+    margin: 0;
+  }
+  
+  
+  ul.animated-list li {
+    font-family: Raleway;
+    font-size: 20px;
+    font-weight: 300;
+    color: white; 
+    animation: colorChange 10s infinite; 
+  }
+
+  @keyframes colorChange {
+    0% {
+      color: white;
+    }
+    25% {
+      color: white;  
+    }
+    50% {
+      color: red; 
+    }
+    75%{
+      color: white;
+    }
+    100% {
+      color: white;
+    }
+  }
+  
+  /* Додаємо анімацію до кожного елемента зі зміщенням часу */
+  ul.animated-list li:nth-child(1) {
+    animation-delay: 0s; /* Перший елемент починає без затримки */
+  }
+  
+  ul.animated-list li:nth-child(2) {
+    animation-delay: 2.5s; /* Другий елемент починає через 2.5 секунди */
+  }
+  
+  ul.animated-list li:nth-child(3) {
+    animation-delay: 5s; /* Третій елемент починає через 5 секунд */
+  }
+  
+  ul.animated-list li:nth-child(4) {
+    animation-delay: 7.5s; /* Четвертий елемент починає через 7.5 секунд */
+  }
+  
+}
+.rules-container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  background: none;
+  color: #fff;
+}
+
+.rules-sidebar {
+  max-width: 300px;
+  width: 100%;
+  background: none;
+  padding: 10px;
+  border-right: 2px solid #d32f2f;
+  box-sizing: border-box;
+
+  .rules-sidebar-item {
+    padding: 15px;
+    margin: 5px 0;
+    cursor: pointer;
+    background: none;
+    border-radius: 4px;
+    text-align: center;
+    transition: background-color 0.3s;
+    border: 1px solid #d32f2f;
+
+    &:hover {
+      background-color: #333;
+    }
+
+    &.active {
+      background-color: #d32f2f;
+      color: #fff;
+    }
+  }
+}
+
+.rules-content {
+  flex-grow: 1;
+  padding: 20px;
+  box-sizing: border-box;
+
+  .rules-title {
+    font-family: Raleway;
+    font-size: 40px;
+    font-weight: 100;
+    letter-spacing: 0%;
+    text-align: start;
+  }
+
+  .rules-description {
+    font-family: Raleway;
+    font-size: 14px;
+    font-weight: 300;
+    color: white;
+    white-space: pre-line;
+  }
+}
+.about-us {
+  padding: 20px;
+  background: none;
+  color: #fff;
+  border-radius: 8px;
+
+
+  &__title {
+    font-family: Raleway;
+    font-size: 60px;
+    font-weight: 100;
+    letter-spacing: 0%;
+    text-align: start;
+  }
+
+  &__text {
+    font-family: Raleway;
+    font-size: 20px;
+    font-weight: 300;
+    color: white;
+  }
+}
+.support-project {
+  padding: 20px;
+  background: none;
+  color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  &__title {
+    font-family: Raleway;
+    font-size: 60px;
+    font-weight: 100;
+    letter-spacing: 0%;
+    text-align: start;
+  }
+
+  &__description {
+    font-family: Raleway;
+    font-size: 20px;
+    font-weight: 300;
+    color: white;
+  }
+
+  &__link {
+      display: inline-block;
+      font-size: 16px;
+      color: red;
+      text-decoration: none;
+      background-color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      margin-bottom: 15px;
+
+      &:hover {
+          background-color: red;
+          color: white;
+      }
+  }
+}

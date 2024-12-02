@@ -1,0 +1,67 @@
+.footer{
+    position:static;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+}
+.line{
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    height: 1px;
+    width: 100%;
+}
+.link-social{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+
+    a{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid red;
+        border-radius: 50%;
+        padding: 8px;
+    }
+    .facebook, .instagram, .telegram{
+        background: none;
+        transition: background 1s;
+    }
+    .facebook-icon *{
+        fill: red;
+        transition: fill 1s;
+    }
+    .instagram-icon *{
+        fill: red;
+        transition: fill 1s;
+    }
+    .telegram-icon *{
+        fill: red;
+        transition: fill 1s;
+    }
+}
+.facebook:hover{
+    background: rgb(65, 65, 255);
+    .facebook-icon *{
+        fill: white;
+    }
+}
+.instagram:hover{
+    background: linear-gradient(45deg, #f9ce34,#ee2a7b,#6228d7);
+    .instagram-icon *{
+        fill: white;
+    }
+}
+.telegram:hover{
+    background: rgb(242, 242, 242);
+    .telegram-icon *{
+        fill: rgb(78, 162, 232);
+    }
+}
