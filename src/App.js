@@ -7,6 +7,7 @@ import Developers from './components/Developers';
 import Support from './components/Support';
 import Game from './components/Game';
 import Homepage from './components/store/HomePage';
+import ErrorPage from './components/ErrorPage';
 import './styles/main.scss';
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
         <Route path="/developers" element={<Developers />} />
         <Route path="/support" element={<Support />} />
         <Route path="/game/:roomCode" element={<Game />} />
+        <Route path="/error" element={<ErrorPage />} />
       </Routes>
     </Router>
   );

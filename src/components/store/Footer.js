@@ -7,9 +7,9 @@ const Footer = () => {
     return (
         <div className="footer">
             <div className="link-social">
-                <a className="facebook" href="#"><Facebook className="facebook-icon"/></a>
-                <a className="instagram" href="#"><Instagram className="instagram-icon"/></a>
-                <a className="telegram" href="#"><Telegram className="telegram-icon"/></a>
+                <a className="facebook" href="facebook.ua"><Facebook className="facebook-icon"/></a>
+                <a className="instagram" href="instagram.ua"><Instagram className="instagram-icon"/></a>
+                <a className="telegram" href="web.telegram.org"><Telegram className="telegram-icon"/></a>
             </div>
             <div className="line"></div>
 
