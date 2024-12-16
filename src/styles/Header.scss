@@ -44,7 +44,9 @@
     max-width: 100%;
     gap: 60px;
     justify-content: space-between;
+    align-items: center;
     a{
+        margin: 4px 8px;
         color: rgb(255, 255, 255);
         font-family: Raleway;
         font-size: 18px;
@@ -61,19 +63,24 @@
     li:hover{
         cursor: pointer;
         border: 1px solid red;
-        border-radius: 8px;
+        border-radius: 15px;
         a{
             color: red;
         }
     }
 }
 .redbuttom{
-    padding: 8px 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
     background: red;
-    border-radius: 8px;
-    transition: weight, border, background 1s;
-    a{
-        color: rgb(0, 0, 0);
+    box-shadow: 2px 2px 2px white;
+    transition: background 1s, box-shadow 1s ;
+    a{  
+        margin: 4px 8px;
+        color: white;
+        transition: color 1s;
         font-family: Raleway; 
         font-size: 18px;
         font-weight: 400;
@@ -84,11 +91,11 @@
     }}
 .redbuttom:hover{
     cursor: pointer;
+    border-radius: 15px;
+    background: none;
     border: 1px solid red;
-    background:none;
-
+    box-shadow: 2px 3px 3px red;
     a{
         color: red;
-
-}
+    }
 }
