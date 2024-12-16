@@ -56,14 +56,15 @@
         text-align: left;
         transition: color 1s;
     }
-    li{
+    li{ border-radius: 15px;
         padding: 4px 8px;
-        transition: weight, border 1s;
+        transition: border 1s, box-shadow 1s ;
     }
     li:hover{
         cursor: pointer;
         border: 1px solid red;
         border-radius: 15px;
+        box-shadow: 2px 3px 3px red;
         a{
             color: red;
         }
